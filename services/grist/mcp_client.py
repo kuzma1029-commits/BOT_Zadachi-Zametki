@@ -187,6 +187,22 @@ class GristMCPClient:
             {"doc_id": self.doc_id, "table_id": tid, "records": [record]},
         )
 
+    async def update_record(self, table: str, row_id: int, fields: dict[str, Any]) -> None:
+        """Обновляет существующую запись. keys — label колонок."""
+        tid = await self.table_id(table)
+        record = {}
+        for label, value in fields.items():
+            record[await self.column_id(tid, label)] = value
+        await self.call_json(
+            "grist_update_records",
+            {
+                "doc_id": self.doc_id,
+                "table_id": tid,
+                "record_ids": [row_id],
+                "records": [record],
+            },
+        )
+
     async def set_choices(self, table: str, column_label: str, choices: list[str]) -> None:
         """Обновляет список вариантов Choice-колонки (категории/статусы)."""
         tid = await self.table_id(table)
@@ -222,13 +238,22 @@ class GristMCPClient:
         )
 
     async def list_records(
-        self, table: str, limit: int = 100, offset: int = 0
+        self,
+        table: str,
+        limit: int = 100,
+        offset: int = 0,
+        row_filter: dict[str, list[Any]] | None = None,
     ) -> Any:
         tid = await self.table_id(table)
-        return await self.call_json(
-            "grist_list_records",
-            {"doc_id": self.doc_id, "table_id": tid, "limit": limit, "offset": offset},
-        )
+        args: dict[str, Any] = {
+            "doc_id": self.doc_id,
+            "table_id": tid,
+            "limit": limit,
+            "offset": offset,
+        }
+        if row_filter:
+            args["filter"] = row_filter
+        return await self.call_json("grist_list_records", args)
 
     async def warmup(self) -> None:
         """Проверяет соединение и резолвит таблицы/колонки заранее."""

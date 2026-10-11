@@ -48,6 +48,14 @@ def get_statuses() -> list[str]:
         return _load()["statuses"]
 
 
+def get_done_status() -> str:
+    """Статус, означающий завершение задачи."""
+    statuses = get_statuses()
+    if "Готово" in statuses:
+        return "Готово"
+    return statuses[-1] if statuses else "Готово"
+
+
 def add_category(name: str) -> tuple[bool, list[str]]:
     """Добавляет категорию. Возвращает (изменено ли, актуальный список)."""
     name = name.strip()
