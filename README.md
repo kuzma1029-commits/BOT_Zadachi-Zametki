@@ -81,8 +81,8 @@ Telegram → aiogram 3 → GigaChat (тип записи + категория)
 ### 1. Клонировать и установить зависимости
 
 ```bash
-git clone https://github.com/kuzma1029-commits/BOT_Задачи-Заметки.git
-cd BOT_Задачи-Заметки
+git clone https://github.com/kuzma1029-commits/BOT_Zadachi-Zametki.git
+cd BOT_Zadachi-Zametki
 python -m venv .venv
 .venv\Scripts\activate        # Windows; Linux/macOS: source .venv/bin/activate
 pip install -r requirements.txt
