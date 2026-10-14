@@ -15,4 +15,4 @@ Dockerfile
 .dockerignore
 README.md
 AGENTS.md
-ИНСТРУКЦИЯ.md
+*.md
